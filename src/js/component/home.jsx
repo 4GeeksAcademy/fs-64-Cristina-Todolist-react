@@ -1,26 +1,46 @@
-import React from "react";
 
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
+import React, { useState } from 'react';
+import '../../styles/index.css';
 
-//create your first component
-const Home = () => {
-	return (
-		<div className="text-center">
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
-		</div>
-	);
+const TodoList = () => {
+    const [tasks, setTasks] = useState([]);
+    const [inputValue, setInputValue] = useState('');
+
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter' && inputValue.trim()) {
+            setTasks([...tasks, inputValue]);
+            setInputValue('');
+        }
+    };
+
+    const handleDelete = (index) => {
+        setTasks(tasks.filter((_, i) => i !== index));
+    };
+
+    return (
+        <div className="todo-container">
+            <h1>Lista de Tareas</h1>
+            <input 
+                type="text" 
+                value={inputValue} 
+                onChange={(e) => setInputValue(e.target.value)} 
+                onKeyPress={handleKeyPress} 
+                placeholder="Añadir nueva tarea"
+            />
+            <ul>
+                {tasks.length === 0 ? (
+                    <li>No hay tareas, añadir tareas</li>
+                ) : (
+                    tasks.map((task, index) => (
+                        <li key={index} className="task-item">
+                            {task}
+                            <span className="delete-icon" onClick={() => handleDelete(index)}>🗑️</span>
+                        </li>
+                    ))
+                )}
+            </ul>
+        </div>
+    );
 };
 
-export default Home;
+export default TodoList;
